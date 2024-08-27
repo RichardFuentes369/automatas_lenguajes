@@ -525,6 +525,16 @@
     <py-script>
       def lenguaje_potencia(*args,**kwargs):
           result_place = Element('output')
+      
+          if not (Element('conjuntoB').value):
+              result = "A"," = λ"
+              result_place.write(result)
+              return 
+          if not (Element('conjuntoA').value):
+              result = "A"," = λ"
+              result_place.write(result)
+              return 
+
           listA = list(map(str.strip, Element('conjuntoB').value.split(',')))
           solucion = PotenciacionL(listA,int(Element('conjuntoA').value))
           result = ""
