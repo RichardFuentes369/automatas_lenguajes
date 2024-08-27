@@ -149,7 +149,7 @@
                     <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_union')">Unión</a>
                     <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_interseccion')">Intersección</a>
                     <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_resta')">Resta</a>
-                    <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_clausula_de_kleene')">Cláusula de Kleene</a>
+                    <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_kleene')">Cláusula de Kleene</a>
                     <a href="#" class="m-1 btn btn-success btn-sm btn-block" onclick="opcionSeleccionada('lenguaje_positiva')">Positiva</a>
                   </div>
                 </div>
@@ -274,8 +274,20 @@
       def Pertencia(a,b):
         listA = list(map(str.strip, a.split(',')))
         listB = list(map(str.strip, b.split(',')))
-        conjuntoA = set(listA)
-        conjuntoB = set(listB)
+        resulListA = []
+        resulListB = []
+        for i in listA:
+            if i == "":
+                resulListA.append("λ")
+            else:
+                resulListA.append(i)
+        for j in listB:
+            if j == "":
+                resulListB.append("λ")
+            else:
+                resulListB.append(j)
+        conjuntoA = set(resulListA)
+        conjuntoB = set(resulListB)
         listresult =[]
         for i in conjuntoB:
           pertenece = False
@@ -305,8 +317,20 @@
       def Union(a,b):
         listA = list(map(str.strip, a.split(',')))
         listB = list(map(str.strip, b.split(',')))
-        conjuntoA = set(listA)
-        conjuntoB = set(listB)
+        resulListA = []
+        resulListB = []
+        for i in listA:
+            if i == "":
+                resulListA.append("λ")
+            else:
+                resulListA.append(i)
+        for j in listB:
+            if j == "":
+                resulListB.append("λ")
+            else:
+                resulListB.append(j)
+        conjuntoA = set(resulListA)
+        conjuntoB = set(resulListB)
         return "(A ∪ B) = ",conjuntoA|conjuntoB
     </py-script>
     
@@ -319,10 +343,22 @@
       def Interseccion(a,b):
         listA = list(map(str.strip, a.split(',')))
         listB = list(map(str.strip, b.split(',')))
-        conjuntoA = set(listA)
-        conjuntoB = set(listB)
+        resulListA = []
+        resulListB = []
+        for i in listA:
+            if i == "":
+                resulListA.append("λ")
+            else:
+                resulListA.append(i)
+        for j in listB:
+            if j == "":
+                resulListB.append("λ")
+            else:
+                resulListB.append(j)
+        conjuntoA = set(resulListA)
+        conjuntoB = set(resulListB)
         if (len(conjuntoA & conjuntoB) == 0):
-          return "(A ∩ B) = Ø"
+          return "(A ∩ B) = λ"
         else:
           return "(A ∩ B) = ",conjuntoA & conjuntoB
     </py-script>
@@ -353,14 +389,26 @@
       def DiferenciaAbsoluta(a,b):
         listA = list(map(str.strip, a.split(',')))
         listB = list(map(str.strip, b.split(',')))
-        conjuntoA = set(listA)
-        conjuntoB = set(listB)
+        resulListA = []
+        resulListB = []
+        for i in listA:
+            if i == "":
+                resulListA.append("λ")
+            else:
+                resulListA.append(i)
+        for j in listB:
+            if j == "":
+                resulListB.append("λ")
+            else:
+                resulListB.append(j)
+        conjuntoA = set(resulListA)
+        conjuntoB = set(resulListB)
         diferenciaA_B = conjuntoA - conjuntoB
         diferenciaB_A = conjuntoB - conjuntoB
         if (len(diferenciaA_B|diferenciaB_A) == 0):
-          return"(A \ B) = Ø"
+            return"(A \ B) = λ"
         else:
-          return"(A \ B) = ",diferenciaA_B|diferenciaB_A
+            return"(A \ B) = ",diferenciaA_B|diferenciaB_A
     </py-script>
 
     <!-- Alfabeto diferencia simetrica -->
@@ -372,10 +420,22 @@
       def DiferenciaSimetrica(a,b):
         listA = list(map(str.strip, a.split(',')))
         listB = list(map(str.strip, b.split(',')))
-        conjuntoA = set(listA)
-        conjuntoB = set(listB)
+        resulListA = []
+        resulListB = []
+        for i in listA:
+            if i == "":
+                resulListA.append("λ")
+            else:
+                resulListA.append(i)
+        for j in listB:
+            if j == "":
+                resulListB.append("λ")
+            else:
+                resulListB.append(j)
+        conjuntoA = set(resulListA)
+        conjuntoB = set(resulListB)
         if (len(conjuntoA^conjuntoB) == 0):
-          return "(A ⊕ B) = Ø"
+          return "(A ⊕ B) = λ"
         else:
           return "(A ⊕ B) = ",conjuntoA^conjuntoB
     </py-script>
@@ -400,15 +460,27 @@
         solucion = Concatenacion(Element('conjuntoA').value,Element('conjuntoB').value)
         result_place.write(solucion)
       def Concatenacion(a,b):
-        if(a == ""):
-          result = "λ"+b
-          return"AB = ", result
-        elif(b == ""):
-          result = a+"λ"
-          return"AB = ", result
-        else:
-          result = a+""+b
-          return"AB = ", result
+        listA = list(map(str.strip, a.split(',')))
+        listA = list(map(str.strip, a.split(',')))
+        listB = list(map(str.strip, b.split(',')))
+        resListA = []
+        resListB = []
+        result = []
+        res = set()
+        for i in listA:
+            if i == "":
+                resListA.append("λ")
+            else:
+                resListA.append(i)
+        for i in listB:
+            if i == "":
+                resListB.append("λ")
+            else:
+                resListB.append(i) 
+        result = resListA +resListB
+        res = set(result)
+        result = list(res)
+        return result
     </py-script>
     
     <!-- Cadena potencia -->
@@ -416,15 +488,22 @@
       def cadena_potencia(*args,**kwargs):
         result_place = Element('output')
         solucion = Potenciacion(Element('conjuntoB').value,Element('conjuntoA').value)
-        result_place.write(solucion)
+        result = ""
+        for i in solucion:
+            result = result+""+i
+        result_place.write(result)
       def Potenciacion(a,b):
-        if(int(b) == 0):
+        if(len(b) == 0 | len(a) == 0):
+          return "λ"
+        elif(int(b) == 0):
           return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
         elif(int(b) != 0):
           if((a*int(b)) == 0):
             return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
           else:
             return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = ",(a*int(b))
+        elif(len(b) | len(a)):
+          return "λ","0".translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
         else:
           return "λ","0".translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
     </py-script>
@@ -437,27 +516,241 @@
         result_place.write(solucion)
       def Inversa(a):
         if(len(a)==0):
-          return"A = λ \nAᴿ = λ"
+          return"A = λ Aᴿ = λ"
         else:
-          return"A = ", a, "\nAᴿ = ",a[::-1]
+          return"A = ", a, "Aᴿ = ",a[::-1]
     </py-script>
 
+    <!-- lenguaje_potencia -->
+    <py-script>
+      def lenguaje_potencia(*args,**kwargs):
+          result_place = Element('output')
+          listA = list(map(str.strip, Element('conjuntoB').value.split(',')))
+          solucion = PotenciacionL(listA,int(Element('conjuntoA').value))
+          result = ""
+          for i in solucion:
+            result = result+""+i
+          result_place.write(result)
+      def PotenciacionL(a,b):
+          listresult = []
+          if(int(b) == 0):
+              return "A",str(b).translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
+          elif(int(b) == 1):
+              listresult = a
+              sol = ""
+              for i in listresult:
+                  sol = sol+"  "+i
+              return "A", str(b).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")), " = ", sol
+          else:
+              resultP = PotenciacionL(a, b - 1)[-1]  
+              for i in resultP:
+                  for j in a:
+                      if(i == ""):
+                          listresult.append("λ" + j)
+                      elif(j == ""):
+                          listresult.append(i + "λ")
+                      else:
+                          listresult.append(i + j)
+              sol = ""
+              for i in listresult:
+                  sol = sol+"  "+i
+              return "A", str(b).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")), " = ", sol
+    </py-script>
 
-<!--
-    lenguaje_potencia
-    lenguaje_concatenacion
-    lenguaje_inversa
-    lenguaje_union
-    lenguaje_interseccion
-    lenguaje_resta
-    lenguaje_kleene
-    lenguaje_positiva
--->
+    <!-- lenguaje_concatenacion -->
+    <py-script>
+      def lenguaje_concatenacion(*args,**kwargs):
+          result_place = Element('output')
+          solucion = ConcatenacionL(Element('conjuntoA').value,Element('conjuntoB').value)
+          result_place.write(solucion)
+      def ConcatenacionL(a,b):
+          listA = list(map(str.strip, a.split(',')))
+          listB = list(map(str.strip, b.split(',')))
+          result = []
+          if not a:
+              for i in listB:
+                  if(i == ""):
+                      result.append("λ")
+                  else:
+                      result.append(i)
+              return result
+          elif not b:
+              for i in listA:
+                  if(i == ""):
+                      result.append("λ")
+                  else:
+                      result.append(i)
+              return result
+          else:
+              for i in listA:
+                  for j in listB:
+                      if(i == ""):
+                          concatenar = "λ"+j
+                      elif(j == ""):
+                          concatenar = i+"λ"
+                      else:
+                          concatenar = i+j
+                      result.append(concatenar)
+              return result
+    </py-script>
 
+    <!-- lenguaje_inversa -->
+    <py-script>
+      def lenguaje_inversa(*args,**kwargs):
+          result_place = Element('output')
+          solucion = InversaL(Element('conjuntoA').value)
+          result_place.write(solucion)
+      def InversaL(a):
+          listA = list(map(str.strip, a.split(',')))
+          result = []
+          listAResult = []
+          for j in listA:
+              if j == "":
+                  listAResult.append("λ")
+              else:
+                  listAResult.append(j)
+          for i in reversed(listA):
+              inversa = ''.join(reversed(i))
+              if i == "":
+                  result.append("λ")
+              else:
+                  result.append(inversa)
+          return "A = ", listAResult, "<br>Aᴿ = ",result
+    </py-script>
 
+    <!-- lenguaje_union -->
+    <py-script>
+      def lenguaje_union(*args,**kwargs):
+          result_place = Element('output')
+          solucion = UnionL(Element('conjuntoA').value,Element('conjuntoB').value)
+          result_place.write(solucion)
+      def UnionL(a,b):
+          listA = list(map(str.strip, a.split(',')))
+          listB = list(map(str.strip, b.split(',')))
+          resulListA = []
+          resulListB = []
+          for i in listA:
+              if i == "":
+                  resulListA.append("λ")
+              else:
+                  resulListA.append(i)
+          for j in listB:
+              if j == "":
+                  resulListB.append("λ")
+              else:
+                  resulListB.append(j)
+          return "(A ∪ B) =", set(resulListA+resulListB)
+    </py-script>
+
+    <!-- lenguaje_interseccion -->
+    <py-script>
+      def lenguaje_interseccion(*args,**kwargs):
+          result_place = Element('output')
+          solucion = InterseccionL(Element('conjuntoA').value,Element('conjuntoB').value)
+          result_place.write(solucion)
+      def InterseccionL(a,b):
+          listA = list(map(str.strip, a.split(',')))
+          listB = list(map(str.strip, b.split(',')))
+          resulListA = []
+          resulListB = []
+          for i in listA:
+              if i == "":
+                  resulListA.append("λ")
+              else:
+                  resulListA.append(i)
+          for j in listB:
+              if j == "":
+                  resulListB.append("λ")
+              else:
+                  resulListB.append(j)
+          conjuntoA = set(resulListA)
+          conjuntoB = set(resulListB)
+          return"(A ∩ B) = ",conjuntoA & conjuntoB
+    </py-script>
+
+    <!-- lenguaje_resta -->
+    <py-script>
+      def lenguaje_resta(*args,**kwargs):
+          result_place = Element('output')
+          solucion = restaL(Element('conjuntoA').value,Element('conjuntoB').value)
+          result_place.write(solucion)
+      def restaL(a,b):
+          listA = list(map(str.strip, a.split(',')))
+          listB = list(map(str.strip, b.split(',')))
+          resulListA = []
+          resulListB = []
+          for i in listA:
+              if i == "":
+                  resulListA.append("λ")
+              else:
+                  resulListA.append(i)
+          for j in listB:
+              if j == "":
+                  resulListB.append("λ")
+              else:
+                  resulListB.append(j)
+          conjunto1 = set(resulListA)
+          conjunto2 = set(resulListB)
+          l1_l2 = list(conjunto1 - conjunto2)
+          l2_l1 = list(conjunto2 - conjunto1)
+          if not l1_l2 and not l2_l1:
+              return "L1-L2 = λ L2-L1 = λ"
+          elif not l1_l2:
+              return "L1-L2 = λ L2-L1 =", l2_l1
+          elif not l2_l1:
+              return "L1-L2 =", l1_l2, " L2-L1 = λ"
+          else:
+              return "L1-L2 =", l1_l2, " L2-L1 =", l2_l1
+    </py-script>
+    
+    <!-- lenguaje_kleene -->
+    <py-script>
+    def lenguaje_kleene(*args,**kwargs):
+      result_place = Element('output')
+      solucion = lenguajekleene(Element('conjuntoA').value,Element('conjuntoB').value)
+      result_place.write(solucion)
+    def lenguajekleene(a,b):
+      lenguaje = set()
+      respuesta = set()
+      for i in range(0, a):
+          # cadena = input("Ingrese una cadena:  ")
+          cadena = "hola"
+          lenguaje.add(cadena)
+          respuesta.add(cadena)
+      for i in lenguaje:
+          for j in lenguaje:
+              respuesta.add(i+j)
+              respuesta.add((i+j)*b)
+      result = ["@", *respuesta, "..."]
+      return "L* = ", result
+    </py-script>
+
+    <!--lenguaje_positiva-->
+    <py-script>
+    def lenguaje_positiva(*args,**kwargs):
+      result_place = Element('output')
+      solucion = Positiva(Element('conjuntoA').value,Element('conjuntoB').value)
+      result_place.write(solucion)
+    def Positiva(a,b):
+      lenguaje = set()
+      respuesta = set()
+      for i in range(0, a):
+          # cadena = input("Ingrese una cadena:  ")
+          cadena = "hola"
+          lenguaje.add(cadena)
+          respuesta.add(cadena)
+      for i in lenguaje:
+          for j in lenguaje:
+              respuesta.add(i+j)
+              respuesta.add((i+j) * b)
+      result = [*respuesta, "..."]
+      return "L = ", result
+    </py-script>
+
+    <!--javaScript-->
     <script>
 
-      localStorage.setItem('sistema', false)
+      localStorage.setItem('sistema', true)
       localStorage.setItem('opcionSeleccionada', null)
       
       const getSistema = (variable) => {
@@ -506,7 +799,7 @@
 
       const opcionSeleccionada = (opcion) => {
 
-        if(opcion == 'cadena_longitud' || opcion == 'cadena_inversa'){
+        if(opcion == 'cadena_longitud' || opcion == 'cadena_inversa' || opcion == "lenguaje_inversa"){
           $('.label2').addClass('d-none')
           $('.input2').addClass('d-none')
         }else{
