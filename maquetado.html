@@ -708,7 +708,7 @@
           listA = list(map(str.strip, Element('conjuntoA').value.split(',')))
           listA = [item if item != '' else 'λ' for item in listA]
           solucion = lenguajekleene(listA)
-          result = "".join(solucion)  # Unir la solución en una sola cadena
+          result = "".join(solucion)  
           result_place.write(result)
 
       def lenguajekleene(a):
@@ -737,10 +737,14 @@
       def lenguaje_positiva(*args,**kwargs):
         result_place = Element('output')
         listA = list(map(str.strip, Element('conjuntoA').value.split(',')))
-        solucion = Positiva(listA)
+        listA = [item if item != '' else 'λ' for item in listA]
         result = ""
-        for i in solucion:
+        if Element('conjuntoA').value != "":
+          solucion = Positiva(listA)
+          for i in solucion:
             result = result+""+i
+        else:
+          result =  "A⁰ = λ"
         result_place.write(result)
       def Positiva(a):
         from itertools import product
