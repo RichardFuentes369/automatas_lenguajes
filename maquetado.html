@@ -493,17 +493,13 @@
             result = result+""+i
         result_place.write(result)
       def Potenciacion(a,b):
-        if(len(b) == 0 | len(a) == 0):
-          return "λ"
-        elif(int(b) == 0):
+        if(int(b) == 0):
           return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
         elif(int(b) != 0):
           if((a*int(b)) == 0):
             return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
           else:
             return a,b.translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = ",(a*int(b))
-        elif(len(b) | len(a)):
-          return "λ","0".translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
         else:
           return "λ","0".translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
     </py-script>
@@ -516,55 +512,39 @@
         result_place.write(solucion)
       def Inversa(a):
         if(len(a)==0):
-          return"A = λ Aᴿ = λ"
+          return"A = λ \nAᴿ = λ"
         else:
-          return"A = ", a, "Aᴿ = ",a[::-1]
+          return"A = ", a, "\nAᴿ = ",a[::-1]
     </py-script>
 
     <!-- lenguaje_potencia -->
     <py-script>
       def lenguaje_potencia(*args,**kwargs):
           result_place = Element('output')
-      
-          if not (Element('conjuntoB').value):
-              result = "A"," = λ"
-              result_place.write(result)
-              return 
-          if not (Element('conjuntoA').value):
-              result = "A"," = λ"
-              result_place.write(result)
-              return 
-
           listA = list(map(str.strip, Element('conjuntoB').value.split(',')))
           solucion = PotenciacionL(listA,int(Element('conjuntoA').value))
           result = ""
           for i in solucion:
-            result = result+""+i
+              result = result+""+i
           result_place.write(result)
-      def PotenciacionL(a,b):
-          listresult = []
-          if(int(b) == 0):
-              return "A",str(b).translate(str.maketrans("0123456789","⁰¹²³⁴⁵⁶⁷⁸⁹"))," = λ"
-          elif(int(b) == 1):
-              listresult = a
-              sol = ""
-              for i in listresult:
-                  sol = sol+"  "+i
-              return "A", str(b).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")), " = ", sol
-          else:
-              resultP = PotenciacionL(a, b - 1)[-1]  
-              for i in resultP:
-                  for j in a:
-                      if(i == ""):
-                          listresult.append("λ" + j)
-                      elif(j == ""):
-                          listresult.append(i + "λ")
-                      else:
-                          listresult.append(i + j)
-              sol = ""
-              for i in listresult:
-                  sol = sol+"  "+i
-              return "A", str(b).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")), " = ", sol
+      def PotenciacionL(a, b):
+        from itertools import product
+        def translate_exponent(exponent):
+          return str(exponent).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹"))
+
+        def generate_combinations(words, exponent):
+          return list(product(words, repeat=exponent))
+
+        if int(b) == 0:
+          return "A", translate_exponent(b), " = λ"
+        elif int(b) == 1:
+          sol = ",  ".join(a)
+          return "A", translate_exponent(b), " = ", sol
+        else:
+          combinations = generate_combinations(a, int(b))
+          sol = ",  ".join(["".join(combo) for combo in combinations])
+          iniciles = ",  ".join(["".join(combo) for combo in a])
+          return "A", translate_exponent(b), " = ", iniciles,", ", sol
     </py-script>
 
     <!-- lenguaje_concatenacion -->
@@ -715,46 +695,63 @@
     
     <!-- lenguaje_kleene -->
     <py-script>
-    def lenguaje_kleene(*args,**kwargs):
-      result_place = Element('output')
-      solucion = lenguajekleene(Element('conjuntoA').value,Element('conjuntoB').value)
-      result_place.write(solucion)
-    def lenguajekleene(a,b):
-      lenguaje = set()
-      respuesta = set()
-      for i in range(0, a):
-          # cadena = input("Ingrese una cadena:  ")
-          cadena = "hola"
-          lenguaje.add(cadena)
-          respuesta.add(cadena)
-      for i in lenguaje:
-          for j in lenguaje:
-              respuesta.add(i+j)
-              respuesta.add((i+j)*b)
-      result = ["@", *respuesta, "..."]
-      return "L* = ", result
+      def lenguaje_kleene(*args, **kwargs):
+          result_place = Element('output')
+          listA = list(map(str.strip, Element('conjuntoA').value.split(',')))
+          listA = [item if item != '' else 'λ' for item in listA]
+          solucion = lenguajekleene(listA)
+          result = "".join(solucion)  # Unir la solución en una sola cadena
+          result_place.write(result)
+
+      def lenguajekleene(a):
+          from itertools import product
+
+          def translate_exponent(exponent):
+              return str(exponent).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹"))
+
+          def generate_combinations(words, exponent):
+              return list(product(words, repeat=exponent))
+
+          if a == ['']:
+              return ["A", translate_exponent(len(a)), " = λ"]
+          elif len(a) == 1:
+              sol = ",  ".join(a)
+              return ["A", translate_exponent(len(a)), " = ", sol]
+          else:
+              combinations = generate_combinations(a, len(a))
+              sol = ",  ".join(["".join(combo) for combo in combinations])
+              iniciales = ",  ".join(a)
+              return ["A", translate_exponent(len(a)), " = ", iniciales, ", ", sol, " ..."]
     </py-script>
 
     <!--lenguaje_positiva-->
     <py-script>
-    def lenguaje_positiva(*args,**kwargs):
-      result_place = Element('output')
-      solucion = Positiva(Element('conjuntoA').value,Element('conjuntoB').value)
-      result_place.write(solucion)
-    def Positiva(a,b):
-      lenguaje = set()
-      respuesta = set()
-      for i in range(0, a):
-          # cadena = input("Ingrese una cadena:  ")
-          cadena = "hola"
-          lenguaje.add(cadena)
-          respuesta.add(cadena)
-      for i in lenguaje:
-          for j in lenguaje:
-              respuesta.add(i+j)
-              respuesta.add((i+j) * b)
-      result = [*respuesta, "..."]
-      return "L = ", result
+      def lenguaje_positiva(*args,**kwargs):
+        result_place = Element('output')
+        listA = list(map(str.strip, Element('conjuntoA').value.split(',')))
+        solucion = Positiva(listA)
+        result = ""
+        for i in solucion:
+            result = result+""+i
+        result_place.write(result)
+      def Positiva(a):
+        from itertools import product
+        def translate_exponent(exponent):
+          return str(exponent).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹"))
+
+        def generate_combinations(words, exponent):
+          return list(product(words, repeat=exponent))
+
+        if int(len(a)) == 0:
+          return "A", translate_exponent(len(a)), " = λ"
+        elif int(len(a)) == 1:
+          sol = ",  ".join(a)
+          return "A", translate_exponent(len(a)), " = ", sol
+        else:
+          combinations = generate_combinations(a, int(len(a)))
+          sol = ",  ".join(["".join(combo) for combo in combinations])
+          iniciles = ",  ".join(["".join(combo) for combo in a])
+          return  "",sol
     </py-script>
 
     <!--javaScript-->
@@ -809,7 +806,7 @@
 
       const opcionSeleccionada = (opcion) => {
 
-        if(opcion == 'cadena_longitud' || opcion == 'cadena_inversa' || opcion == "lenguaje_inversa"){
+        if(opcion == 'cadena_longitud' || opcion == 'cadena_inversa' || opcion == "lenguaje_inversa" || opcion == 'lenguaje_kleene' || opcion == 'lenguaje_positiva'){
           $('.label2').addClass('d-none')
           $('.input2').addClass('d-none')
         }else{
