@@ -520,13 +520,20 @@
     <!-- lenguaje_potencia -->
     <py-script>
       def lenguaje_potencia(*args,**kwargs):
-          result_place = Element('output')
-          listA = list(map(str.strip, Element('conjuntoB').value.split(',')))
+        def translate_exponent(exponent):
+          return str(exponent).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹"))
+
+        result_place = Element('output')
+        listA = list(map(str.strip, Element('conjuntoB').value.split(',')))
+        result = ""
+        if Element('conjuntoA').value != "":
           solucion = PotenciacionL(listA,int(Element('conjuntoA').value))
-          result = ""
           for i in solucion:
-              result = result+""+i
-          result_place.write(result)
+            result = result+""+i
+        else:
+          result =  "A⁰ = λ"
+        result_place.write(result)
+
       def PotenciacionL(a, b):
         from itertools import product
         def translate_exponent(exponent):
